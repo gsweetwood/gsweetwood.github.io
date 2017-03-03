@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>How-to SWAPI</title>
+	<link rel="stylesheet" href="HowToStyle.css">
+  </head>
+  <body>
+	  <h1>A COMPANION GUIDE TO THE STAR WARS API (SWAPI)</h1>
+			<h3>The SWAPI is a great tool for when you want to display<br>
+				or explore the following Star Wars categories:
+				<ul>
+					<li>Planets
+					<li>Starships
+					<li>Vehicles
+					<li>People
+					<li>Films
+					<li>Species
+				</ul>
+			</h3>
+		<div id="intro">
+		The SWAPI overall does a great job explaining how to get started and <br>
+		how to start making calls to retrieve information.  This companion guide<br>
+		will help explain parts of the guide that are lacking in explanation as<br>
+		well as demonstrate more of the data available and how to use it.  Enjoy
+		</div>
+		<br><span>First, here is the link to the SWAPI documentation -><a href="http://tomadmz.com/SWAPI/main.html">beep boop boop beep</a>
+		
+		<div class="clear">
+			<h4>Clearing The InnerHTML For Better Usability</h4>
+			<p>The first example is a small bit of code, but can have a larger impact on your webpage.<br>
+			Here is the line of code:<br>
+			</p>
+			<img src="inner_clear_good.jpg" alt="Code to clear innerHTML">
+			<p>This is the beginning of the function that adds an event listner for the "next" button.<br>
+			In only the second line of code it calls <em>doc.Bod.innerHTML = "";</em>.  The reason for this <br>
+			is to clear the page and then show the new page of data.  This will clear out the contents of the<br>
+			element selected AND all of the children of that element.  Without this line, the data would simply <br>
+			add to the bottom, repeating until you ran out of pages.  Let's also imagine if we do not add this<br>
+			line to the "previous" button, then the problem becomes even worse because once again it will only<br>
+			add to the bottom.  The list could become very long, repeat itself, and be in the incorrect order.<br>
+			By adding the <em>doc.Bod.innerHTML = "";</em> you avoid this issue by clearing everything from before<br>
+			and only showing the latest page to be called.  I think the SWAPI guide just breezed over this<br>
+			with no explanation and this should help create a cleaner and more reasonable code.<br>
+			  <span><strong>NOTE:</strong> There is some debate on efficiency of this method.  There is debate on whether using a while<br>
+			  loop to removeFirstChild would be quicker and more efficacious, but for now, using the innerHTML method<br>
+			  works on most if not all browsers and it is a simple method.</span>
+			</p>
+			<p>Below is the example of the code working properly, notice how each click shows all new data and doesn't concatenate.
+			<fieldset>
+					<div id="docBod">
+					</div>  
+					<div class="container text-center">
+					  <p>
+						<button id="prev" class="btn btn-warning btn-sml" role="button">« Previous</button>
+						<button id="next" class="btn btn-warning btn-sml" role="button">Continue »</button>
+					  </p>
+					</div>
+				<script src="nextPrev_good.js"></script>
+			</fieldset>
+			
+		<div class="append">
+			<h4>The Importance of Appending Properly</h4>
+			<p>This second example on how this companion will help is a further explanation of<br>
+				to use of appendChild().  The guide has this thrown into the code, but does not<br>
+				go into when or why it is necessary.  In the example that the SWAPI guide gives, they <br>
+				are demonstrating the creation of a bindButtons() function.  In the function, they are<br>
+				looping each planet, then beneath that list the movie appearances it contains.  The correct<br>
+				code nests each bit of information undereath its proper planet.  The DOM call of appendChild()<br>
+				nests the child within the parent, just like in HTML, for example &ltdiv&gt&ltp&gt&lt/p&gt&lt/div&gt <br>
+				That paragraph is nested into that div.  When using DOM to create an element, it must be placed<br>
+				somewhere in the document.  If you simply place it in the document body, it loses its meaing.<br>
+				See the picuture below.<br><br>
+				Let's take a look at an example of the correc tnotation (left) and its results(right):
+				
+			</p>
+			<img src="append_good.jpg"><img src="append_good_result.jpg">
+			<p>As you can see this is the result we are looking for.  But what happens if you just copy the first<br>
+				append rather than properly appending to the proper parent?
+			</p>
+			<img src="append_bad.jpg" alt="Bad appendChild code"><img src="append_bad_result.jpg" alt="Result of bad appendChild">
+			<p>Here the wrong node call the appendChild.  Now the results are not in the correct are, are listed<br>
+			incorrectly, and have lost their connection/meaning to the rightful person.  This shows the importance<br> 
+			of proper appending, especially when looping, otherwise your data can show up somewhere unexpected and<br>
+			result in something confusing or meaningless.  It also will affect its appearance because now it is now<br>
+			longer following the CSS rules of the inteded parent.
+			</p>
+		</div>
+		
+		<div class="dataStructure">
+			<h4>Knowing More About The Data We Want</h4>
+			<p>In the examples given to us by the SWAPI start-up guide, we see such limited data.  In reality, there is actually<br>
+			much more detail hidden away inside the objects that are returned.  The SWAPI does not describe or show<br>
+			these.  If you refer to the documentation, there is a way to request the resource schema by using <br>
+			<em>http://swapi.co/api/&ltresource&gt/schema</em>.  If you make such a request, you are sent all of the properties <br>
+			of that resource and what to expect for their values. Full examples can be seen in the documentation and the 'people"<br>
+			example can be seen at the bottom of this page.	
+			
+			</p>
+		</div>
+		
+		
+		<div class="search">
+			<h4>A Very Important Feature - The Search</h4>
+			<p>Perhaps one of the most importatnt features for the user to use, is the least explained.  This, of<br>
+			course, is the search function.  What if you don't want to browse through pages of people or planets<br>
+			or vehicles?  What if you knew the name of your particular resource and wanted to know more.  Let's try<br>
+			to use the small amount of information the SWAPI gave us and turn it into something useful for the developer.<br>
+			<p>		There's a few things you should know about the search.  First, is how to how to make the search.<br>
+			  This part is simple, it is a GET request and the URL for the search request looks like:<br><br>
+			  https://swapi.co/api/&ltresource&gt/?search=<br><br>
+			  Fill in the resource and place your search term after the "=".  The table below shows what can be searched  for each resource:<br>
+			  <table>
+				<tr>
+				  <th>Resource</th>
+				  <th>Searchable Attribute</th>
+				</tr>
+				<tr>
+				  <td>People</td>
+				  <td>Name</td>
+				</tr>
+				<tr>
+				  <td>Planets</td>
+				  <td>Name</td>
+				</tr>
+				<tr>
+				  <td>Spaceships</td>
+				  <td>Name, Model</td>
+				</tr>
+				<tr>
+				  <td>Vehicles</td>
+				  <td>Name, Model</td>
+				</tr>
+				<tr>
+				  <td>Films</td>
+				  <td>Title</td>
+				</tr>
+				<tr>
+				  <td>Species</td>
+				  <td>Name</td>
+				</tr>
+			  </table>
+		  
+		  <p>Okay, so now you have created a search request.  The search is NOT case sensitive and will return partial matches.<br>
+			In return you will get an object with
+			a content-type of JSON.  You can parse this with the JSON.parse() command.  For easy navigating<br>
+			of the object, it is suggested to log this to the console.  There are a few important things to note<br>
+			about this object. Let's explore them.<br>
+			<ul>
+			  <li><strong>count:</strong>   This is the amount of objects that matched your search.</li>
+			  <li><strong>prev:</strong>   A URL to the previous page of results(if any, otherwise null).</li>
+			  <li><strong>next:</strong>   A URL to the next page of reults (if any, otherwise null).</li>
+			  <li><strong>results[]:</strong>  A table of the objects that matched your search. This is limited to 10 per page.</li>
+			</ul>
+			
+		  <p>The results are grouped into pages, with each page holding a "results" array(max of 10) of the objects that match the search.<br>
+			If there are more than 10 matches, the next set of 10 can be found by making a new request using the URL found the "next" attribute.<br>
+			The "prev" attribute is likewise the URL for the previous page of results.  Each object in the results array has a considerable amount<br>
+			of attributes.  The value of any of these may be accessed by a call such as this call for the "name" -- <em>response.results[i].name</em><br>
+			This call will retrieve the value of the name of the resource at that paritcular location of the array.  Now that we know how to get<br>
+			some values from the search, it is up to you how and what to display from the search.<br>
+			<p>Here I have created a custom search box utilizing the API.  First, the user will choose a resource from the radio buttons.<br>
+			Next, the user will type in their search term in the provided text input box.  Finally, the user will click the SEARCH/ADD button.<br>
+			This button will call a function that displays how many results matched and then display them in a list, 10 at a time, until all<br>
+			names have been added.  To clear the list, a CLEAR button has been added for convenience.
+			
+			<fieldset>
+			<legend>SEARCH A RESOURCE</legend>
+				
+				<label>Choose a resource:</label>
+				<input type="radio" name="resource" value="planets">Planets</input>
+				<input type="radio" name="resource" value="starships">Starships</input>
+				<input type="radio" name="resource" value="vehicles">Vehicles</input>
+				<input type="radio" name="resource" value="people">People</input>
+				<input type="radio" name="resource" value="films">Films</input>
+				<input type="radio" name="resource" value="species">Species</input><br>
+				<label>Search Here</label><input type="text" id="searchTerm"></input>
+				<script src="search.js"></script>
+				<button id="searchButton" role="button">SEARCH/ADD MORE</button>
+				<button id="clearButton" role="button">CLEAR</button>
+				<div>
+					<span>Results returned:</span><span id="resultCount"></span>
+					<ol id="searchResult"></ol>
+				</div>
+				</fieldset>
+				<p>Let's check out the code for this search function:</p>
+				<image src="searchpic.jpg" alt="Picture of the search code">
+				<p>As you can see, the code is fairly stright forward.  First, we construct URL of the request.  Because all requests to the SWAPI<br>
+				  GET requests, we need to form the query into the URL.  This will first consist of the root "<em>http://swapi.co/api/</em>". Next,<br>
+				  we need to define a resource.  To eliminate spelling errors on the user end, radio buttons were created and user simple selects one.<br>
+				  A for loop finds the checked radio button and its value can be added to the URL.  Next, the SWAPI requires "<em>/?search=</em>". A text<br>
+				  input field allows the user to define the search query, its value is then concatenated to the URL.  The last portion is the "page=" <br>
+				  and the page number is a variable that starts with 1.  This is because all results of the search are grouped and seperated by pages.<br>
+				  By starting with 1, we will get an object with the first 10 results. The pageCounter variable increments each time the button is pressed<br>
+				  and a search is completed. By clicking the button again, we would then send a request for the second page and so on.  <br>
+				  After the URL is constructed a new XMLHttpRequest is created.  It will be a GET request, using our URL that we constructed, and it will<br>
+				  be asynchronous.  The resoponse will be parsed using JSON.parse(). I have added a line in the HTML to show how many results matched the <br>
+				  query.  That can be accessed through response.count.  Now is the part that should customized to the developers liking.  A for loop is <br>
+				  constructed to loop through each object in the <em>results</em> array.  Each object is a seperate entity (people, starships, etc.). It <br>
+				  is here where the details can be accessed.  For this example, we just wanted to display the name of each matched result, but can be changed<br>
+				  to display many different attributes.  Notice the if statement that will access "title" instead of "name" if films was the chosen resource.  <br>
+				  A new list node is created and then appended to the ordered list in the HTML. The request is then sent and the pageCounter increments.<br>
+				 <p>You might also notice a clear button. This allows the user to clear the results of the current search.  They can then, create a new search.<br>
+				   Without this, the only way to clear the results would be to refresh the page.  This function simply sets the pageCounter back to 1, the search<br>
+				   term and the quantity of results to "".  Lastly, it clears all of the results by using setting the innerHTML to "", as discussed earlier on<br>
+				   this page.
+				  </p>
+				  <h4>Displaying Individual Data</h4>
+				  <p>Perhaps you want to go into more detail on a specific resource or even a single entity. We can directly request a single entry.  A URL<br> 
+					for a request like this would look like this "<em>http://swapi.co/api/people/1/</em>".  This request would return the object for none other<br>
+					than Luke Skywalker.  If we changed that 1, to a 4, we would get Darth Vader in return.  So let's use this type of request to display<br>
+					everything we can about a one person.
+					
+					<fieldset>
+					  <legend>Display All The Results</legend>
+					  <label>Choose a person</label>
+					  <select id="select">
+						<option value='1'>Person 1</option>
+						<option value='2'>Person 2</option>
+						<option value='3'>Person 3</option>
+						<option value='4'>Person 4</option>
+						<option value='5'>Person 5</option>
+						<option value='6'>Person 6</option>
+						<option value='7'>Person 7</option>
+						<option value='8'>Person 8</option>
+					  </select>
+					  <button id="getDetailsButton">GET DETAILS</button><br><br>
+					  <span id="name"></span><br>
+					  <span id="height"></span><br>
+					  <span id="mass"></span><br>
+					  <span id="hair_color"></span><br>
+					  <span id="skin_color"></span><br>
+					  <span id="eye_color"></span><br>
+					  <span id="birthyear"></span><br>
+					  <span id="gender"></span><br>
+					  <span id="homeworld"></span><br>
+					  <span id="films"></span><br>
+					  <span id="species"></span><br>
+					  <span id="vehicles"></span><br>
+					  <span id="starships"></span><br>
+					  <span id="created"></span><br>
+					  <span id="edited"></span><br>
+					  <span id="url"></span><br>
+					  <script src="getDetail.js"></script>
+					</fieldset>
+						<p>These are all the attributes for a single person.  Notice that all the values are strings or an array<br>
+						  of strings.  The arrays are the other resources except for homeworld/planet.  This is because a person<br>
+						  can olny have one homeworld.  Also take note that the other resources show a value of a URL, which if <br>
+						  requested, will return the object of said resource that links to this person.  So, if you wanted to display<br>
+						  the names of planets or film titles, you would first need to send a GET request to that URL.<br> 
+						</p>
+						<p>Lastly, notice the last attribute, "url".  That is the URL of its own location.  This is very important <br>
+						  because we do not have a list of URLs for every resource and their attributes.  A useful method can be <br>
+						  to combine the search method or the browse method with this direct request method.  That way you can find<br>
+						  what you are looking for and then go into the details once you have found the correct resource.<br>
+						</p>
+						<h5>Here's a look at the code for the above function:</h5>
+						<image src="bindDet1.jpg">
+						<image src="bindDet2.jpg">
+						
+						<p>This completes the companion guide to the SWAPI.<br><br>
+						This website was created by Garret Sweetwood.
+						</p>
+						
+
+					
+		</div>
+			
+  </body>
+</html>
